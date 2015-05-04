@@ -31,7 +31,7 @@ passingSpec :: String
 passingSpec = [i|
 module Spec (spec) where
 
-import           Test.Hspec
+import           Test.Hspec.Meta
 
 spec :: Spec
 spec = do
@@ -43,7 +43,7 @@ failingSpec :: String
 failingSpec = [i|
 module Spec (spec) where
 
-import           Test.Hspec
+import           Test.Hspec.Meta
 
 spec :: Spec
 spec = do
