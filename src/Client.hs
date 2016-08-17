@@ -24,7 +24,7 @@ client = either (const $ connectError) id <$> tryJust p go
 
     p :: HttpException -> Maybe ()
     p e = case e of
-      FailedConnectionException2 _ _ _ se -> guard (isDoesNotExistException se) >> Just ()
+      HttpExceptionRequest _ (ConnectionFailure se) -> guard (isDoesNotExistException se) >> Just ()
       _ -> Nothing
 
     isDoesNotExistException :: SomeException -> Bool
@@ -33,7 +33,7 @@ client = either (const $ connectError) id <$> tryJust p go
     go = do
       manager <- newManager defaultManagerSettings {managerRawConnection = return newConnection}
       request <- parseUrl "http://localhost/"
-      Response{..} <- httpLbs request {checkStatus = \_ _ _ -> Nothing} manager
+      Response{..} <- httpLbs request {checkResponse = \_ _ -> return ()} manager
       return (statusIsSuccessful responseStatus, responseBody)
 
     newConnection _ _ _ = do
